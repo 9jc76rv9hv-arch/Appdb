@@ -1,5 +1,7 @@
 # Glucose omrekenen (mg/dL ⇄ mmol/L)
 
+**Open de app:** https://9jc76rv9hv-arch.github.io/Appdb/
+
 A small phone app for people with diabetes (and their carers) to convert blood glucose
 between **mg/dL** and **mmol/L** in both directions.
 
