@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glucose Omrekenen</title>
+<meta name="description" content="Reken bloedglucose snel om tussen mg/dL en mmol/L. Werkt offline.">
+<meta name="theme-color" content="#0f5c6e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Glucose">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Atkinson+Hyperlegible+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow column like a meter face — two linked readouts, a range gauge, then a tap-to-load reference table. */
+:root {
+  --bg: #eef3f4;
+  --surface: #ffffff;
+  --fg: #11272d;
+  --muted: #587077;
+  --line: #d3dfe2;
+  --accent: #0f5c6e;
+  --accent-soft: #dcecef;
+  --vlow: #b3261e;
+  --low: #d9542b;
+  --ok: #2e7d4f;
+  --high: #c98a00;
+  --vhigh: #a8551a;
+  --chip-fg: #ffffff;
+  --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-num: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1a1e; --surface: #132a30; --fg: #e5f0f2; --muted: #93aeb4; --line: #25444c;
+    --accent: #5cc3d6; --accent-soft: #173a42;
+    --vlow: #ff6b60; --low: #ff8c5a; --ok: #5cc98a; --high: #f2c14e; --vhigh: #f0975a; --chip-fg: #0c1a1e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1a1e; --surface: #132a30; --fg: #e5f0f2; --muted: #93aeb4; --line: #25444c;
+  --accent: #5cc3d6; --accent-soft: #173a42;
+  --vlow: #ff6b60; --low: #ff8c5a; --ok: #5cc98a; --high: #f2c14e; --vhigh: #f0975a; --chip-fg: #0c1a1e;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 16px) calc(env(safe-area-inset-bottom, 0px) + 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 { font-size: 1.3rem; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+.lang {
+  display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface);
+}
+.lang button {
+  font: inherit; font-size: 0.85rem; font-weight: 700; border: 0; background: transparent; color: var(--muted);
+  padding: 6px 12px; cursor: pointer; min-height: 36px;
+}
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+
+.meter {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 0.85rem; font-weight: 700; color: var(--muted); letter-spacing: 0.02em; }
+.readout {
+  display: flex; align-items: baseline; gap: 10px;
+  border: 2px solid var(--line); border-radius: var(--radius);
+  padding: 8px 14px; background: var(--bg);
+  transition: border-color .15s;
+}
+.readout:focus-within { border-color: var(--accent); }
+.readout input {
+  flex: 1; min-width: 0; width: 100%;
+  font-family: var(--font-num); font-weight: 700; font-size: 3rem; line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  border: 0; background: transparent; color: var(--fg); padding: 0; outline: none;
+}
+.readout input::placeholder { color: var(--line); }
+.unit { font-family: var(--font-num); font-size: 1.05rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.swaprow { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.85rem; }
+.swaprow::before, .swaprow::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.clear {
+  font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--accent); background: var(--accent-soft);
+  border: 0; border-radius: 999px; padding: 6px 14px; min-height: 36px; cursor: pointer;
+}
+
+.status { display: flex; flex-direction: column; gap: 10px; }
+.chip {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 0.95rem;
+  padding: 6px 14px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--muted);
+}
+.chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; opacity: .9; }
+.chip[data-band] { color: var(--chip-fg); }
+.chip[data-band]::before { background: var(--chip-fg); }
+.chip[data-band="vlow"] { background: var(--vlow); }
+.chip[data-band="low"] { background: var(--low); }
+.chip[data-band="ok"] { background: var(--ok); }
+.chip[data-band="high"] { background: var(--high); }
+.chip[data-band="vhigh"] { background: var(--vhigh); }
+.hint { font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+.gauge { position: relative; padding-top: 14px; }
+.bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; }
+.bar span { display: block; height: 100%; }
+.marker {
+  position: absolute; top: 0; width: 0; height: 0;
+  border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 11px solid var(--fg);
+  transform: translateX(-8px); transition: left .2s ease;
+}
+.ticks { position: relative; height: 1.3em; font-family: var(--font-num); font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+.ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 0.8rem; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+td { font-family: var(--font-num); font-size: 1rem; padding: 0; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+td button {
+  all: unset; box-sizing: border-box; display: block; width: 100%; padding: 9px 8px; cursor: pointer;
+}
+td:first-child button { border-left: 4px solid var(--band, transparent); padding-left: 10px; }
+tbody tr:hover td, tbody tr:focus-within td { background: var(--accent-soft); }
+td button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+td.lbl { font-family: var(--font-body); font-size: 0.85rem; color: var(--muted); padding: 9px 8px; }
+
+.info p { margin: 0 0 8px; font-size: 0.95rem; }
+.info p:last-child { margin-bottom: 0; }
+.formula { font-family: var(--font-num); font-size: 0.95rem; background: var(--accent-soft); border-radius: 8px; padding: 8px 10px; display: block; }
+.install[hidden] { display: none !important; }
+.install { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.install button {
+  font: inherit; font-weight: 700; background: var(--accent); color: var(--surface); border: 0; border-radius: 999px; padding: 8px 16px; min-height: 40px; cursor: pointer;
+}
+footer { font-size: 0.8rem; color: var(--muted); text-align: center; }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 360px) { .readout input { font-size: 2.4rem; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1 data-i18n="title">Glucose omrekenen</h1>
+    <div class="lang" role="group" aria-label="Taal / Language">
+      <button type="button" id="lang-nl" data-lang="nl" aria-pressed="true">NL</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <section class="meter" aria-labelledby="meter-h">
+    <h2 id="meter-h" data-i18n="enter" style="margin:0">Typ in één van beide velden</h2>
+    <div class="field">
+      <label for="mmol">mmol/L</label>
+      <div class="readout">
+        <input id="mmol" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0,0" value="7,8">
+        <span class="unit">mmol/L</span>
+      </div>
+    </div>
+    <div class="swaprow" aria-hidden="true">× 18 &nbsp;⇅&nbsp; ÷ 18</div>
+    <div class="field">
+      <label for="mgdl">mg/dL</label>
+      <div class="readout">
+        <input id="mgdl" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0" value="141">
+        <span class="unit">mg/dL</span>
+      </div>
+    </div>
+
+    <div class="status" aria-live="polite">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="chip" id="chip" data-band="ok">Binnen streefwaarde</span>
+        <button type="button" class="clear" id="clear" data-i18n="clear">Wissen</button>
+      </div>
+      <p class="hint" id="hint"></p>
+    </div>
+
+    <div class="gauge" aria-hidden="true">
+      <div class="marker" id="marker"></div>
+      <div class="bar" id="bar"></div>
+      <div class="ticks" id="ticks"></div>
+    </div>
+  </section>
+
+  <section class="card install" id="install" hidden>
+    <span data-i18n="installText">Zet de app op je beginscherm.</span>
+    <button type="button" id="installBtn" data-i18n="install">Installeren</button>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="table">Snelle tabel — tik om te laden</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>mmol/L</th><th>mg/dL</th><th data-i18n="meaning">Betekenis</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card info">
+    <h2 data-i18n="howH">Hoe reken je om?</h2>
+    <p><span class="formula">mg/dL = mmol/L × 18</span></p>
+    <p><span class="formula">mmol/L = mg/dL ÷ 18</span></p>
+    <p data-i18n="howP">De app rekent met de precieze factor 18,016 (molmassa van glucose: 180,16 g/mol ÷ 10). mmol/L wordt afgerond op 1 decimaal, mg/dL op een heel getal.</p>
+    <p data-i18n="rangeP">Kleuren volgen de internationale consensus voor Time in Range: 3,9–10,0 mmol/L (70–180 mg/dL) is het streefgebied. Jouw persoonlijke streefwaarden kunnen anders zijn.</p>
+  </section>
+
+  <footer data-i18n="disclaimer">Alleen een rekenhulp, geen medisch advies. Overleg met je arts of diabetesverpleegkundige over je waarden en behandeling.</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var FACTOR = 18.016; // mg/dL per mmol/L for glucose (180.16 g/mol)
+
+  // Bands per International Consensus on Time in Range (2019), defined per unit
+  // so a boundary value like 10.0 mmol/L (= 180.2 mg/dL) stays "in range".
+  var BANDS = [
+    { key: "vlow",  mmolMax: 2.95, mgMax: 53.5 },
+    { key: "low",   mmolMax: 3.85, mgMax: 69.5 },
+    { key: "ok",    mmolMax: 10.05, mgMax: 180.5 },
+    { key: "high",  mmolMax: 13.95, mgMax: 250.5 },
+    { key: "vhigh", mmolMax: Infinity, mgMax: Infinity }
+  ];
+
+  var T = {
+    nl: {
+      title: "Glucose omrekenen", enter: "Typ in één van beide velden", clear: "Wissen",
+      table: "Snelle tabel — tik om te laden", meaning: "Betekenis",
+      howH: "Hoe reken je om?",
+      howP: "De app rekent met de precieze factor 18,016 (molmassa van glucose: 180,16 g/mol ÷ 10). mmol/L wordt afgerond op 1 decimaal, mg/dL op een heel getal.",
+      rangeP: "Kleuren volgen de internationale consensus voor Time in Range: 3,9–10,0 mmol/L (70–180 mg/dL) is het streefgebied. Jouw persoonlijke streefwaarden kunnen anders zijn.",
+      disclaimer: "Alleen een rekenhulp, geen medisch advies. Overleg met je arts of diabetesverpleegkundige over je waarden en behandeling.",
+      installText: "Zet de app op je beginscherm.", install: "Installeren",
+      none: "Geen waarde", invalid: "Typ een getal, bijvoorbeeld 5,6 of 100.",
+      implausible: "Deze waarde is ongebruikelijk hoog. Controleer of je het juiste veld gebruikt.",
+      bands: { vlow: "Zeer laag", low: "Laag", ok: "Binnen streefwaarde", high: "Hoog", vhigh: "Zeer hoog" },
+      hints: {
+        vlow: "Onder 3,0 mmol/L (54 mg/dL). Behandel een hypo direct volgens je behandelplan.",
+        low: "3,0–3,8 mmol/L (54–69 mg/dL). Dit is een hypo; neem snelle koolhydraten volgens je plan.",
+        ok: "3,9–10,0 mmol/L (70–180 mg/dL).",
+        high: "10,1–13,9 mmol/L (181–250 mg/dL).",
+        vhigh: "Boven 13,9 mmol/L (250 mg/dL). Volg je behandelplan en controleer zo nodig op ketonen."
+      }
+    },
+    en: {
+      title: "Glucose converter", enter: "Type in either field", clear: "Clear",
+      table: "Quick table — tap to load", meaning: "Meaning",
+      howH: "How to convert",
+      howP: "The app uses the precise factor 18.016 (glucose molar mass 180.16 g/mol ÷ 10). mmol/L is rounded to 1 decimal, mg/dL to a whole number.",
+      rangeP: "Colours follow the International Consensus on Time in Range: 3.9–10.0 mmol/L (70–180 mg/dL) is the target range. Your personal targets may differ.",
+      disclaimer: "A calculation aid only, not medical advice. Talk to your doctor or diabetes nurse about your readings and treatment.",
+      installText: "Add the app to your home screen.", install: "Install",
+      none: "No value", invalid: "Type a number, for example 5.6 or 100.",
+      implausible: "This value is unusually high. Check that you are typing in the right field.",
+      bands: { vlow: "Very low", low: "Low", ok: "In range", high: "High", vhigh: "Very high" },
+      hints: {
+        vlow: "Below 3.0 mmol/L (54 mg/dL). Treat a hypo right away following your care plan.",
+        low: "3.0–3.8 mmol/L (54–69 mg/dL). This is a hypo; take fast-acting carbs following your plan.",
+        ok: "3.9–10.0 mmol/L (70–180 mg/dL).",
+        high: "10.1–13.9 mmol/L (181–250 mg/dL).",
+        vhigh: "Above 13.9 mmol/L (250 mg/dL). Follow your care plan and check ketones if advised."
+      }
+    }
+  };
+
+  var TABLE = [
+    [2.5, "vlow"], [3.0, "low"], [3.5, "low"], [3.9, "ok"], [4.5, "ok"], [5.5, "ok"], [6.0, "ok"], [7.0, "ok"],
+    [7.8, "ok"], [8.0, "ok"], [9.0, "ok"], [10.0, "ok"], [11.1, "high"], [12.0, "high"], [13.9, "high"],
+    [15.0, "vhigh"], [20.0, "vhigh"], [25.0, "vhigh"], [33.3, "vhigh"]
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var mmolEl = $("mmol"), mgEl = $("mgdl"), chip = $("chip"), hint = $("hint"), marker = $("marker");
+  var lang = "nl", lastSource = "mmol";
+
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  function sep() { return lang === "nl" ? "," : "."; }
+  function fmt(n, dec) { return n.toFixed(dec).replace(".", sep()); }
+  function parse(s) {
+    s = String(s).trim().replace(/\s/g, "").replace(",", ".");
+    if (s === "") return null;
+    if (!/^\d*\.?\d*$/.test(s) || s === ".") return NaN;
+    return parseFloat(s);
+  }
+  function band(value, unit) {
+    for (var i = 0; i < BANDS.length; i++) {
+      if (value <= (unit === "mmol" ? BANDS[i].mmolMax : BANDS[i].mgMax)) return BANDS[i].key;
+    }
+  }
+
+  function update(source) {
+    lastSource = source;
+    var t = T[lang];
+    var fromEl = source === "mmol" ? mmolEl : mgEl;
+    var toEl = source === "mmol" ? mgEl : mmolEl;
+    var v = parse(fromEl.value);
+    if (v === null || isNaN(v)) {
+      toEl.value = "";
+      chip.removeAttribute("data-band");
+      chip.textContent = t.none;
+      hint.textContent = v === null ? "" : t.invalid;
+      marker.style.opacity = "0";
+      return;
+    }
+    var mg = source === "mmol" ? v * FACTOR : v;
+    toEl.value = source === "mmol" ? fmt(Math.round(mg), 0) : fmt(v / FACTOR, 1);
+    var b = band(v, source);
+    chip.setAttribute("data-band", b);
+    chip.textContent = t.bands[b];
+    var implausible = mg > 1000;
+    hint.textContent = implausible ? t.implausible : t.hints[b];
+    var pct = Math.max(0, Math.min(1, mg / 400)) * 100;
+    marker.style.left = pct + "%";
+    marker.style.opacity = "1";
+    store("glucose.last", JSON.stringify({ s: source, v: fromEl.value }));
+  }
+
+  function buildGauge() {
+    var segs = [[0, 54, "vlow"], [54, 70, "low"], [70, 180, "ok"], [180, 250, "high"], [250, 400, "vhigh"]];
+    $("bar").innerHTML = segs.map(function (s) {
+      return '<span style="width:' + ((s[1] - s[0]) / 4) + '%;background:var(--' + s[2] + ')"></span>';
+    }).join("");
+    var ticks = [[70, "3" + sep() + "9"], [180, "10" + sep() + "0"], [250, "13" + sep() + "9"]];
+    $("ticks").innerHTML = ticks.map(function (k) {
+      return '<span style="left:' + (k[0] / 4) + '%">' + k[1] + "</span>";
+    }).join("");
+  }
+
+  function buildTable() {
+    var t = T[lang];
+    $("tbody").innerHTML = TABLE.map(function (r) {
+      var mmol = fmt(r[0], 1), mg = fmt(Math.round(r[0] * FACTOR), 0);
+      return '<tr><td style="--band:var(--' + r[1] + ')"><button type="button" data-mmol="' + r[0] + '">' + mmol +
+        '</button></td><td><button type="button" data-mmol="' + r[0] + '">' + mg +
+        '</button></td><td class="lbl">' + t.bands[r[1]] + "</td></tr>";
+    }).join("");
+  }
+
+  function setLang(l) {
+    // Keep the typed value but re-express it with the new decimal separator.
+    var cur = parse((lastSource === "mmol" ? mmolEl : mgEl).value);
+    lang = l;
+    document.documentElement.lang = l;
+    document.querySelectorAll("[data-lang]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === l));
+    });
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var k = el.getAttribute("data-i18n");
+      if (T[l][k]) el.textContent = T[l][k];
+    });
+    document.title = T[l].title.charAt(0).toUpperCase() + T[l].title.slice(1);
+    mmolEl.placeholder = "0" + sep() + "0";
+    if (cur !== null && !isNaN(cur)) {
+      var el = lastSource === "mmol" ? mmolEl : mgEl;
+      el.value = String(cur).replace(".", sep());
+    }
+    buildGauge();
+    buildTable();
+    update(lastSource);
+    store("glucose.lang", l);
+  }
+
+  mmolEl.addEventListener("input", function () { update("mmol"); });
+  mgEl.addEventListener("input", function () { update("mg"); });
+  [mmolEl, mgEl].forEach(function (el) {
+    el.addEventListener("focus", function () { el.select(); });
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter") el.blur(); });
+  });
+  $("clear").addEventListener("click", function () {
+    mmolEl.value = ""; mgEl.value = ""; update("mmol"); mmolEl.focus();
+  });
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
+  });
+  $("tbody").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-mmol]");
+    if (!b) return;
+    mmolEl.value = fmt(parseFloat(b.getAttribute("data-mmol")), 1);
+    update("mmol");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Restore last language and value, if any.
+  var savedLang = load("glucose.lang");
+  if (!savedLang) savedLang = (navigator.language || "nl").toLowerCase().indexOf("nl") === 0 ? "nl" : "en";
+  try {
+    var last = JSON.parse(load("glucose.last") || "null");
+    if (last && last.v != null) {
+      lastSource = last.s === "mg" ? "mg" : "mmol";
+      (lastSource === "mmol" ? mmolEl : mgEl).value = last.v;
+    }
+  } catch (e) {}
+  setLang(savedLang === "en" ? "en" : "nl");
+
+  // Offline support and install prompt (only where supported, e.g. when hosted on HTTPS).
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault(); deferred = e; $("install").hidden = false;
+  });
+  $("installBtn").addEventListener("click", function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.finally(function () { deferred = null; $("install").hidden = true; });
+  });
+})();
+</script>
+</body>
+</html>
