@@ -687,8 +687,13 @@
   showTab(load("glucose.tab") === "carb" || location.hash === "#carbs" ? "carb" : "conv");
 
   // Offline support and install prompt (only where supported, e.g. when hosted on HTTPS).
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
+  if ("serviceWorker" in navigator && window.isSecureContext) {
+    // When a new version takes over, reload once so the new files are used straight away.
+    var hadController = !!navigator.serviceWorker.controller, reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (hadController && !reloaded) { reloaded = true; location.reload(); }
+    });
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).catch(function () {});
   }
   var deferred = null;
   window.addEventListener("beforeinstallprompt", function (e) {

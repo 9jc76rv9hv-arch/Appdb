@@ -1,5 +1,6 @@
-// Offline cache: app shell is cached on install; fonts are cached the first time they load.
-const CACHE = "glucose-v3";
+// Offline support. Own files: network first (so updates show right away), cache as offline fallback.
+// Fonts: cache first. API calls are never touched.
+const CACHE = "glucose-v4";
 const SHELL = [
   "./",
   "index.html",
@@ -14,7 +15,12 @@ const SHELL = [
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // cache: "reload" bypasses the browser's HTTP cache so a new version never stores old files.
+  e.waitUntil(
+    caches.open(CACHE)
+      .then((c) => c.addAll(SHELL.map((u) => new Request(u, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {
@@ -26,20 +32,31 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-  // Only cache our own files and fonts; never API calls.
   if (e.request.method !== "GET") return;
-  const host = new URL(e.request.url).hostname;
-  if (host !== self.location.hostname && !host.endsWith("fonts.googleapis.com") && !host.endsWith("fonts.gstatic.com")) return;
+  const url = new URL(e.request.url);
+  const isFont = url.hostname.endsWith("fonts.googleapis.com") || url.hostname.endsWith("fonts.gstatic.com");
+  if (url.origin !== self.location.origin && !isFont) return;
+
+  if (isFont) {
+    e.respondWith(
+      caches.match(e.request).then((hit) => hit || fetch(e.request).then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, copy));
+        return res;
+      }))
+    );
+    return;
+  }
+
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then((hit) => {
-      const net = fetch(e.request).then((res) => {
-        if (res && (res.ok || res.type === "opaque")) {
+    fetch(e.request, { cache: "no-cache" })
+      .then((res) => {
+        if (res.ok) {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(e.request, copy));
         }
         return res;
-      }).catch(() => hit);
-      return hit || net;
-    })
+      })
+      .catch(() => caches.match(e.request, { ignoreSearch: true }))
   );
 });
