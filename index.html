@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Glucose Omrekenen</title>
-<meta name="description" content="Reken bloedglucose snel om tussen mg/dL en mmol/L. Werkt offline.">
+<title>Glucose &amp; Koolhydraten</title>
+<meta name="description" content="Reken bloedglucose om tussen mg/dL en mmol/L en schat koolhydraten van Nederlandse en Spaanse maaltijden.">
 <meta name="theme-color" content="#0f5c6e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -167,278 +167,255 @@ footer { font-size: 0.8rem; color: var(--muted); text-align: center; }
 button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media (max-width: 360px) { .readout input { font-size: 2.4rem; } }
+[hidden] { display: none !important; }
+
+/* ---------- Tabs and carbohydrate screen ---------- */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px;
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 8px); z-index: 5;
+}
+.tabs button {
+  font: inherit; font-weight: 700; font-size: 0.95rem; border: 0; border-radius: 999px; padding: 10px 8px;
+  background: transparent; color: var(--muted); cursor: pointer; min-height: 44px;
+}
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--surface); }
+.panel { display: flex; flex-direction: column; gap: 20px; }
+.lang button { padding: 6px 10px; }
+
+.searchbox {
+  display: flex; align-items: center; gap: 8px;
+  border: 2px solid var(--line); border-radius: var(--radius); background: var(--bg); padding: 4px 12px;
+}
+.searchbox:focus-within { border-color: var(--accent); }
+.searchbox input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 1.05rem; padding: 10px 0; outline: none; }
+.searchbox svg { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.filters button {
+  font: inherit; font-size: 0.85rem; font-weight: 700; border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+  border-radius: 999px; padding: 6px 12px; min-height: 36px; cursor: pointer;
+}
+.filters button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+.list { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; }
+.list li { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.list li:last-child { border-bottom: 0; }
+.list .name { min-width: 0; }
+.list .name strong { display: block; font-size: 1rem; line-height: 1.3; }
+.list .name span { display: block; font-size: 0.82rem; color: var(--muted); }
+.list .name .flag { display: inline; font-family: var(--font-num); font-size: 0.7rem; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; margin-right: 4px; }
+.kh { font-family: var(--font-num); font-weight: 700; font-size: 1.05rem; white-space: nowrap; text-align: right; }
+.kh small { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+.add {
+  font: inherit; font-weight: 700; font-size: 1.3rem; line-height: 1; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: var(--accent-soft); color: var(--accent); cursor: pointer;
+}
+.more { font: inherit; font-weight: 700; color: var(--accent); background: none; border: 0; padding: 10px 0 0; cursor: pointer; }
+.empty { color: var(--muted); font-size: 0.95rem; margin: 10px 0 0; }
+
+.plate-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.plate-total .big { font-family: var(--font-num); font-weight: 700; font-size: 2.6rem; line-height: 1; }
+.plate-total .big small { font-size: 1rem; color: var(--muted); }
+.stepper { display: inline-flex; align-items: center; gap: 4px; }
+.stepper button {
+  font: inherit; font-weight: 700; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--fg); cursor: pointer;
+}
+.stepper output { font-family: var(--font-num); font-size: 0.9rem; min-width: 3.2em; text-align: center; }
+.plate li { grid-template-columns: 1fr auto auto; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  font: inherit; font-weight: 700; font-size: 0.95rem; border: 0; border-radius: 999px; padding: 10px 16px; min-height: 44px; cursor: pointer;
+  background: var(--accent); color: var(--surface);
+}
+.btn.secondary { background: var(--accent-soft); color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: default; }
+.note { font-size: 0.85rem; color: var(--muted); margin: 8px 0 0; }
+
+.photo-preview { width: 100%; max-height: 280px; object-fit: cover; border-radius: 12px; display: block; margin-top: 12px; }
+.ai-result { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.conf { align-self: flex-start; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.error { color: var(--vlow); font-weight: 700; font-size: 0.95rem; margin: 10px 0 0; }
+.spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid var(--accent-soft); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: -3px; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.hidden-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.textin {
+  width: 100%; font: inherit; font-size: 1rem; color: var(--fg); background: var(--bg);
+  border: 2px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-top: 10px;
+}
+.textin:focus { border-color: var(--accent); outline: none; }
+.label-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.label-grid label { font-size: 0.85rem; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; }
+.label-grid input { font-family: var(--font-num); font-size: 1.3rem; font-weight: 700; }
+.label-out { font-family: var(--font-num); font-size: 1.6rem; font-weight: 700; margin: 10px 0 0; }
+details.card summary { cursor: pointer; font-weight: 700; color: var(--muted); font-size: 0.9rem; list-style-position: inside; }
+details.card[open] summary { margin-bottom: 8px; }
+.tips { margin: 0; padding-left: 1.2em; font-size: 0.95rem; display: flex; flex-direction: column; gap: 6px; }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
 </style>
 </head>
 <body>
 <main class="wrap">
   <header>
-    <h1 data-i18n="title">Glucose omrekenen</h1>
-    <div class="lang" role="group" aria-label="Taal / Language">
-      <button type="button" id="lang-nl" data-lang="nl" aria-pressed="true">NL</button>
-      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    <h1 id="appTitle">Glucose</h1>
+    <div class="lang" role="group" aria-label="Taal / Language / Idioma">
+      <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+      <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
   </header>
 
-  <section class="meter" aria-labelledby="meter-h">
-    <h2 id="meter-h" data-i18n="enter" style="margin:0">Typ in één van beide velden</h2>
-    <div class="field">
-      <label for="mmol">mmol/L</label>
-      <div class="readout">
-        <input id="mmol" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0,0" value="7,8">
-        <span class="unit">mmol/L</span>
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab-conv" aria-controls="panel-conv" aria-selected="true" data-i18n="tabConv">Omrekenen</button>
+    <button type="button" role="tab" id="tab-carb" aria-controls="panel-carb" aria-selected="false" data-i18n="tabCarb">Koolhydraten</button>
+  </nav>
+
+  <!-- ================= Omrekenen ================= -->
+  <div class="panel" id="panel-conv" role="tabpanel" aria-labelledby="tab-conv">
+    <section class="meter" aria-labelledby="meter-h">
+      <h2 id="meter-h" data-i18n="enter" style="margin:0">Typ in één van beide velden</h2>
+      <div class="field">
+        <label for="mmol">mmol/L</label>
+        <div class="readout">
+          <input id="mmol" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0,0" value="7,8">
+          <span class="unit">mmol/L</span>
+        </div>
       </div>
-    </div>
-    <div class="swaprow" aria-hidden="true">× 18 &nbsp;⇅&nbsp; ÷ 18</div>
-    <div class="field">
-      <label for="mgdl">mg/dL</label>
-      <div class="readout">
-        <input id="mgdl" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0" value="141">
-        <span class="unit">mg/dL</span>
+      <div class="swaprow" aria-hidden="true">× 18 &nbsp;⇅&nbsp; ÷ 18</div>
+      <div class="field">
+        <label for="mgdl">mg/dL</label>
+        <div class="readout">
+          <input id="mgdl" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0" value="141">
+          <span class="unit">mg/dL</span>
+        </div>
       </div>
-    </div>
-
-    <div class="status" aria-live="polite">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <span class="chip" id="chip" data-band="ok">Binnen streefwaarde</span>
-        <button type="button" class="clear" id="clear" data-i18n="clear">Wissen</button>
+      <div class="status" aria-live="polite">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="chip" id="chip" data-band="ok">Binnen streefwaarde</span>
+          <button type="button" class="clear" id="clear" data-i18n="clear">Wissen</button>
+        </div>
+        <p class="hint" id="hint"></p>
       </div>
-      <p class="hint" id="hint"></p>
-    </div>
+      <div class="gauge" aria-hidden="true">
+        <div class="marker" id="marker"></div>
+        <div class="bar" id="bar"></div>
+        <div class="ticks" id="ticks"></div>
+      </div>
+    </section>
 
-    <div class="gauge" aria-hidden="true">
-      <div class="marker" id="marker"></div>
-      <div class="bar" id="bar"></div>
-      <div class="ticks" id="ticks"></div>
-    </div>
-  </section>
+    <section class="card install" id="install" hidden>
+      <span data-i18n="installText">Zet de app op je beginscherm.</span>
+      <button type="button" id="installBtn" data-i18n="install">Installeren</button>
+    </section>
 
-  <section class="card install" id="install" hidden>
-    <span data-i18n="installText">Zet de app op je beginscherm.</span>
-    <button type="button" id="installBtn" data-i18n="install">Installeren</button>
-  </section>
+    <section class="card">
+      <h2 data-i18n="table">Snelle tabel — tik om te laden</h2>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>mmol/L</th><th>mg/dL</th><th data-i18n="meaning">Betekenis</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
 
-  <section class="card">
-    <h2 data-i18n="table">Snelle tabel — tik om te laden</h2>
-    <div style="overflow-x:auto">
-      <table>
-        <thead><tr><th>mmol/L</th><th>mg/dL</th><th data-i18n="meaning">Betekenis</th></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-  </section>
+    <section class="card info">
+      <h2 data-i18n="howH">Hoe reken je om?</h2>
+      <p><span class="formula">mg/dL = mmol/L × 18</span></p>
+      <p><span class="formula">mmol/L = mg/dL ÷ 18</span></p>
+      <p data-i18n="howP"></p>
+      <p data-i18n="rangeP"></p>
+    </section>
+  </div>
 
-  <section class="card info">
-    <h2 data-i18n="howH">Hoe reken je om?</h2>
-    <p><span class="formula">mg/dL = mmol/L × 18</span></p>
-    <p><span class="formula">mmol/L = mg/dL ÷ 18</span></p>
-    <p data-i18n="howP">De app rekent met de precieze factor 18,016 (molmassa van glucose: 180,16 g/mol ÷ 10). mmol/L wordt afgerond op 1 decimaal, mg/dL op een heel getal.</p>
-    <p data-i18n="rangeP">Kleuren volgen de internationale consensus voor Time in Range: 3,9–10,0 mmol/L (70–180 mg/dL) is het streefgebied. Jouw persoonlijke streefwaarden kunnen anders zijn.</p>
-  </section>
+  <!-- ================= Koolhydraten ================= -->
+  <div class="panel" id="panel-carb" role="tabpanel" aria-labelledby="tab-carb" hidden>
+    <section class="card" aria-labelledby="plate-h">
+      <h2 id="plate-h" data-i18n="plateH">Mijn bord</h2>
+      <div class="plate-total" aria-live="polite">
+        <span class="big"><span id="plateTotal">0</span> <small data-i18n="gCarb">g koolhydraten</small></span>
+        <button type="button" class="clear" id="plateClear" data-i18n="clear">Wissen</button>
+      </div>
+      <ul class="list plate" id="plateList"></ul>
+      <p class="empty" id="plateEmpty" data-i18n="plateEmpty">Nog leeg. Zoek hieronder een gerecht en tik op +, of maak een foto.</p>
+    </section>
 
-  <footer data-i18n="disclaimer">Alleen een rekenhulp, geen medisch advies. Overleg met je arts of diabetesverpleegkundige over je waarden en behandeling.</footer>
+    <section class="card" aria-labelledby="search-h">
+      <h2 id="search-h" data-i18n="searchH">Gerecht zoeken</h2>
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="mealSearch" type="search" autocomplete="off" enterkeyhint="search" placeholder="Bijv. stamppot, paella, churros">
+      </div>
+      <div class="filters" role="group" aria-label="Land">
+        <button type="button" data-country="all" aria-pressed="true" data-i18n="fAll">Alles</button>
+        <button type="button" data-country="nl" aria-pressed="false" data-i18n="fNl">Nederland</button>
+        <button type="button" data-country="es" aria-pressed="false" data-i18n="fEs">Spanje</button>
+      </div>
+      <ul class="list" id="mealList"></ul>
+      <p class="empty" id="mealEmpty" hidden data-i18n="noResults">Niets gevonden. Probeer een ander woord, of gebruik de etiket-rekenaar hieronder.</p>
+      <button type="button" class="more" id="mealMore" hidden></button>
+    </section>
+
+    <section class="card" aria-labelledby="photo-h">
+      <h2 id="photo-h" data-i18n="photoH">Foto van je eten</h2>
+      <p class="note" style="margin-top:0" data-i18n="photoIntro">Maak een foto vóór het eten. De app schat per onderdeel het gewicht en de koolhydraten.</p>
+      <div class="row-actions" style="margin-top:12px">
+        <button type="button" class="btn" id="photoCamera" data-i18n="photoTake">Foto maken</button>
+        <button type="button" class="btn secondary" id="photoPick" data-i18n="photoPick">Kies uit galerij</button>
+      </div>
+      <input class="hidden-input" type="file" id="photoInputCam" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+      <input class="hidden-input" type="file" id="photoInputPick" accept="image/*" tabindex="-1" aria-hidden="true">
+      <img class="photo-preview" id="photoPreview" alt="" hidden>
+      <input class="textin" type="text" id="photoHint" autocomplete="off" hidden placeholder="Optioneel: wat is het? Bijv. paella met kip">
+      <div class="row-actions" style="margin-top:10px">
+        <button type="button" class="btn" id="photoGo" hidden data-i18n="photoGo">Schat koolhydraten</button>
+      </div>
+      <p class="note" id="photoStatus" aria-live="polite"></p>
+      <div class="ai-result" id="photoResult" hidden></div>
+    </section>
+
+    <section class="card" aria-labelledby="label-h">
+      <h2 id="label-h" data-i18n="labelH">Etiket-rekenaar</h2>
+      <p class="note" style="margin-top:0" data-i18n="labelIntro">Staat het op een verpakking? Vul de koolhydraten per 100 g en hoeveel je eet.</p>
+      <div class="label-grid" style="margin-top:10px">
+        <label for="lblPer100"><span data-i18n="labelPer100">KH per 100 g</span>
+          <input class="textin" id="lblPer100" type="text" inputmode="decimal" autocomplete="off" placeholder="0">
+        </label>
+        <label for="lblGrams"><span data-i18n="labelGrams">Gram die je eet</span>
+          <input class="textin" id="lblGrams" type="text" inputmode="decimal" autocomplete="off" placeholder="0">
+        </label>
+      </div>
+      <p class="label-out" aria-live="polite"><span id="lblOut">0</span> <small data-i18n="gCarb">g koolhydraten</small></p>
+      <div class="row-actions" style="margin-top:8px">
+        <button type="button" class="btn secondary" id="lblAdd" data-i18n="addPlate">Op mijn bord</button>
+      </div>
+    </section>
+
+    <section class="card info">
+      <h2 data-i18n="tipsH">Tips voor koolhydraten tellen</h2>
+      <ul class="tips">
+        <li data-i18n="tip1"></li>
+        <li data-i18n="tip2"></li>
+        <li data-i18n="tip3"></li>
+        <li data-i18n="tip4"></li>
+      </ul>
+    </section>
+
+    <details class="card" id="aiSettings">
+      <summary data-i18n="settingsH">Instellingen fotoherkenning</summary>
+      <p class="note" style="margin-top:0" data-i18n="keyIntro"></p>
+      <input class="textin" type="password" id="apiKey" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+      <div class="row-actions" style="margin-top:10px">
+        <button type="button" class="btn" id="keySave" data-i18n="keySave">Opslaan</button>
+        <button type="button" class="btn secondary" id="keyRemove" data-i18n="keyRemove">Verwijderen</button>
+      </div>
+      <p class="note" id="keyStatus" aria-live="polite"></p>
+      <p class="note" data-i18n="keyPrivacy"></p>
+    </details>
+  </div>
+
+  <footer data-i18n="disclaimer"></footer>
 </main>
-
-<script>
-(function () {
-  "use strict";
-  var FACTOR = 18.016; // mg/dL per mmol/L for glucose (180.16 g/mol)
-
-  // Bands per International Consensus on Time in Range (2019), defined per unit
-  // so a boundary value like 10.0 mmol/L (= 180.2 mg/dL) stays "in range".
-  var BANDS = [
-    { key: "vlow",  mmolMax: 2.95, mgMax: 53.5 },
-    { key: "low",   mmolMax: 3.85, mgMax: 69.5 },
-    { key: "ok",    mmolMax: 10.05, mgMax: 180.5 },
-    { key: "high",  mmolMax: 13.95, mgMax: 250.5 },
-    { key: "vhigh", mmolMax: Infinity, mgMax: Infinity }
-  ];
-
-  var T = {
-    nl: {
-      title: "Glucose omrekenen", enter: "Typ in één van beide velden", clear: "Wissen",
-      table: "Snelle tabel — tik om te laden", meaning: "Betekenis",
-      howH: "Hoe reken je om?",
-      howP: "De app rekent met de precieze factor 18,016 (molmassa van glucose: 180,16 g/mol ÷ 10). mmol/L wordt afgerond op 1 decimaal, mg/dL op een heel getal.",
-      rangeP: "Kleuren volgen de internationale consensus voor Time in Range: 3,9–10,0 mmol/L (70–180 mg/dL) is het streefgebied. Jouw persoonlijke streefwaarden kunnen anders zijn.",
-      disclaimer: "Alleen een rekenhulp, geen medisch advies. Overleg met je arts of diabetesverpleegkundige over je waarden en behandeling.",
-      installText: "Zet de app op je beginscherm.", install: "Installeren",
-      none: "Geen waarde", invalid: "Typ een getal, bijvoorbeeld 5,6 of 100.",
-      implausible: "Deze waarde is ongebruikelijk hoog. Controleer of je het juiste veld gebruikt.",
-      bands: { vlow: "Zeer laag", low: "Laag", ok: "Binnen streefwaarde", high: "Hoog", vhigh: "Zeer hoog" },
-      hints: {
-        vlow: "Onder 3,0 mmol/L (54 mg/dL). Behandel een hypo direct volgens je behandelplan.",
-        low: "3,0–3,8 mmol/L (54–69 mg/dL). Dit is een hypo; neem snelle koolhydraten volgens je plan.",
-        ok: "3,9–10,0 mmol/L (70–180 mg/dL).",
-        high: "10,1–13,9 mmol/L (181–250 mg/dL).",
-        vhigh: "Boven 13,9 mmol/L (250 mg/dL). Volg je behandelplan en controleer zo nodig op ketonen."
-      }
-    },
-    en: {
-      title: "Glucose converter", enter: "Type in either field", clear: "Clear",
-      table: "Quick table — tap to load", meaning: "Meaning",
-      howH: "How to convert",
-      howP: "The app uses the precise factor 18.016 (glucose molar mass 180.16 g/mol ÷ 10). mmol/L is rounded to 1 decimal, mg/dL to a whole number.",
-      rangeP: "Colours follow the International Consensus on Time in Range: 3.9–10.0 mmol/L (70–180 mg/dL) is the target range. Your personal targets may differ.",
-      disclaimer: "A calculation aid only, not medical advice. Talk to your doctor or diabetes nurse about your readings and treatment.",
-      installText: "Add the app to your home screen.", install: "Install",
-      none: "No value", invalid: "Type a number, for example 5.6 or 100.",
-      implausible: "This value is unusually high. Check that you are typing in the right field.",
-      bands: { vlow: "Very low", low: "Low", ok: "In range", high: "High", vhigh: "Very high" },
-      hints: {
-        vlow: "Below 3.0 mmol/L (54 mg/dL). Treat a hypo right away following your care plan.",
-        low: "3.0–3.8 mmol/L (54–69 mg/dL). This is a hypo; take fast-acting carbs following your plan.",
-        ok: "3.9–10.0 mmol/L (70–180 mg/dL).",
-        high: "10.1–13.9 mmol/L (181–250 mg/dL).",
-        vhigh: "Above 13.9 mmol/L (250 mg/dL). Follow your care plan and check ketones if advised."
-      }
-    }
-  };
-
-  var TABLE = [
-    [2.5, "vlow"], [3.0, "low"], [3.5, "low"], [3.9, "ok"], [4.5, "ok"], [5.5, "ok"], [6.0, "ok"], [7.0, "ok"],
-    [7.8, "ok"], [8.0, "ok"], [9.0, "ok"], [10.0, "ok"], [11.1, "high"], [12.0, "high"], [13.9, "high"],
-    [15.0, "vhigh"], [20.0, "vhigh"], [25.0, "vhigh"], [33.3, "vhigh"]
-  ];
-
-  var $ = function (id) { return document.getElementById(id); };
-  var mmolEl = $("mmol"), mgEl = $("mgdl"), chip = $("chip"), hint = $("hint"), marker = $("marker");
-  var lang = "nl", lastSource = "mmol";
-
-  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-
-  function sep() { return lang === "nl" ? "," : "."; }
-  function fmt(n, dec) { return n.toFixed(dec).replace(".", sep()); }
-  function parse(s) {
-    s = String(s).trim().replace(/\s/g, "").replace(",", ".");
-    if (s === "") return null;
-    if (!/^\d*\.?\d*$/.test(s) || s === ".") return NaN;
-    return parseFloat(s);
-  }
-  function band(value, unit) {
-    for (var i = 0; i < BANDS.length; i++) {
-      if (value <= (unit === "mmol" ? BANDS[i].mmolMax : BANDS[i].mgMax)) return BANDS[i].key;
-    }
-  }
-
-  function update(source) {
-    lastSource = source;
-    var t = T[lang];
-    var fromEl = source === "mmol" ? mmolEl : mgEl;
-    var toEl = source === "mmol" ? mgEl : mmolEl;
-    var v = parse(fromEl.value);
-    if (v === null || isNaN(v)) {
-      toEl.value = "";
-      chip.removeAttribute("data-band");
-      chip.textContent = t.none;
-      hint.textContent = v === null ? "" : t.invalid;
-      marker.style.opacity = "0";
-      return;
-    }
-    var mg = source === "mmol" ? v * FACTOR : v;
-    toEl.value = source === "mmol" ? fmt(Math.round(mg), 0) : fmt(v / FACTOR, 1);
-    var b = band(v, source);
-    chip.setAttribute("data-band", b);
-    chip.textContent = t.bands[b];
-    var implausible = mg > 1000;
-    hint.textContent = implausible ? t.implausible : t.hints[b];
-    var pct = Math.max(0, Math.min(1, mg / 400)) * 100;
-    marker.style.left = pct + "%";
-    marker.style.opacity = "1";
-    store("glucose.last", JSON.stringify({ s: source, v: fromEl.value }));
-  }
-
-  function buildGauge() {
-    var segs = [[0, 54, "vlow"], [54, 70, "low"], [70, 180, "ok"], [180, 250, "high"], [250, 400, "vhigh"]];
-    $("bar").innerHTML = segs.map(function (s) {
-      return '<span style="width:' + ((s[1] - s[0]) / 4) + '%;background:var(--' + s[2] + ')"></span>';
-    }).join("");
-    var ticks = [[70, "3" + sep() + "9"], [180, "10" + sep() + "0"], [250, "13" + sep() + "9"]];
-    $("ticks").innerHTML = ticks.map(function (k) {
-      return '<span style="left:' + (k[0] / 4) + '%">' + k[1] + "</span>";
-    }).join("");
-  }
-
-  function buildTable() {
-    var t = T[lang];
-    $("tbody").innerHTML = TABLE.map(function (r) {
-      var mmol = fmt(r[0], 1), mg = fmt(Math.round(r[0] * FACTOR), 0);
-      return '<tr><td style="--band:var(--' + r[1] + ')"><button type="button" data-mmol="' + r[0] + '">' + mmol +
-        '</button></td><td><button type="button" data-mmol="' + r[0] + '">' + mg +
-        '</button></td><td class="lbl">' + t.bands[r[1]] + "</td></tr>";
-    }).join("");
-  }
-
-  function setLang(l) {
-    // Keep the typed value but re-express it with the new decimal separator.
-    var cur = parse((lastSource === "mmol" ? mmolEl : mgEl).value);
-    lang = l;
-    document.documentElement.lang = l;
-    document.querySelectorAll("[data-lang]").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === l));
-    });
-    document.querySelectorAll("[data-i18n]").forEach(function (el) {
-      var k = el.getAttribute("data-i18n");
-      if (T[l][k]) el.textContent = T[l][k];
-    });
-    document.title = T[l].title.charAt(0).toUpperCase() + T[l].title.slice(1);
-    mmolEl.placeholder = "0" + sep() + "0";
-    if (cur !== null && !isNaN(cur)) {
-      var el = lastSource === "mmol" ? mmolEl : mgEl;
-      el.value = String(cur).replace(".", sep());
-    }
-    buildGauge();
-    buildTable();
-    update(lastSource);
-    store("glucose.lang", l);
-  }
-
-  mmolEl.addEventListener("input", function () { update("mmol"); });
-  mgEl.addEventListener("input", function () { update("mg"); });
-  [mmolEl, mgEl].forEach(function (el) {
-    el.addEventListener("focus", function () { el.select(); });
-    el.addEventListener("keydown", function (e) { if (e.key === "Enter") el.blur(); });
-  });
-  $("clear").addEventListener("click", function () {
-    mmolEl.value = ""; mgEl.value = ""; update("mmol"); mmolEl.focus();
-  });
-  document.querySelectorAll("[data-lang]").forEach(function (b) {
-    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
-  });
-  $("tbody").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-mmol]");
-    if (!b) return;
-    mmolEl.value = fmt(parseFloat(b.getAttribute("data-mmol")), 1);
-    update("mmol");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  // Restore last language and value, if any.
-  var savedLang = load("glucose.lang");
-  if (!savedLang) savedLang = (navigator.language || "nl").toLowerCase().indexOf("nl") === 0 ? "nl" : "en";
-  try {
-    var last = JSON.parse(load("glucose.last") || "null");
-    if (last && last.v != null) {
-      lastSource = last.s === "mg" ? "mg" : "mmol";
-      (lastSource === "mmol" ? mmolEl : mgEl).value = last.v;
-    }
-  } catch (e) {}
-  setLang(savedLang === "en" ? "en" : "nl");
-
-  // Offline support and install prompt (only where supported, e.g. when hosted on HTTPS).
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
-  }
-  var deferred = null;
-  window.addEventListener("beforeinstallprompt", function (e) {
-    e.preventDefault(); deferred = e; $("install").hidden = false;
-  });
-  $("installBtn").addEventListener("click", function () {
-    if (!deferred) return;
-    deferred.prompt();
-    deferred.userChoice.finally(function () { deferred = null; $("install").hidden = true; });
-  });
-})();
-</script>
+<script src="meals.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

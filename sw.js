@@ -1,8 +1,11 @@
 // Offline cache: app shell is cached on install; fonts are cached the first time they load.
-const CACHE = "glucose-v1";
+const CACHE = "glucose-v2";
 const SHELL = [
   "./",
   "index.html",
+  "app.js",
+  "meals.js",
+  "vendor/anthropic-sdk.js",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",
@@ -23,7 +26,10 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  // Only cache our own files and fonts; never API calls.
   if (e.request.method !== "GET") return;
+  const host = new URL(e.request.url).hostname;
+  if (host !== self.location.hostname && !host.endsWith("fonts.googleapis.com") && !host.endsWith("fonts.gstatic.com")) return;
   e.respondWith(
     caches.match(e.request, { ignoreSearch: true }).then((hit) => {
       const net = fetch(e.request).then((res) => {

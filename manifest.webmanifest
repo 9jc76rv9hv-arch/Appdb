@@ -1,7 +1,7 @@
 {
-  "name": "Glucose omrekenen – mg/dL ⇄ mmol/L",
+  "name": "Glucose & Koolhydraten",
   "short_name": "Glucose",
-  "description": "Reken bloedglucose snel om tussen mg/dL en mmol/L.",
+  "description": "Reken bloedglucose om tussen mg/dL en mmol/L en schat koolhydraten van maaltijden.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
