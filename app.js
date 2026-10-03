@@ -39,7 +39,7 @@
       photoBusy: "Foto wordt bekeken… dit duurt meestal 10 tot 30 seconden.",
       photoOffline: "Geen internetverbinding. Fotoherkenning werkt alleen online; zoek het gerecht hierboven op.",
       photoAuth: "De API-sleutel wordt niet geaccepteerd. Controleer de sleutel bij Instellingen.",
-      photoRate: "Te veel verzoeken of tegoed op. Probeer het over een minuut opnieuw of controleer je tegoed.",
+      photoRate: "Het gratis maximum van Google is even bereikt. Probeer het over een minuut opnieuw, of morgen als het daglimiet op is.",
       photoFail: "Schatten lukte niet ({msg}). Probeer opnieuw of zoek het gerecht op.",
       photoRefused: "Deze foto kon niet worden beoordeeld. Probeer een andere foto.",
       photoNoFood: "Geen eten herkend op de foto.",
@@ -56,11 +56,11 @@
       tip3: "Een bord is meestal ca. 26 cm. Een vuist is ongeveer 1 portie rijst, pasta of aardappel.",
       tip4: "Spaanse ‘raciones’ zijn vaak om te delen: deel het totaal door het aantal personen met de − knop.",
       settingsH: "Instellingen fotoherkenning",
-      keyIntro: "Fotoherkenning gebruikt Claude van Anthropic. Je hebt een eigen API-sleutel nodig (console.anthropic.com → API Keys). Een foto kost ongeveer 2 tot 5 eurocent.",
-      keySave: "Opslaan", keyRemove: "Verwijderen",
+      keyIntro: "Fotoherkenning gebruikt Gemini van Google en is gratis. Maak één keer een gratis sleutel: ga naar aistudio.google.com/apikey, log in met je Google-account, tik op ‘Create API key’ en plak de sleutel hieronder. Er geldt een maximum aantal foto’s per minuut en per dag.",
+      keyLink: "Gratis sleutel maken ↗", keySave: "Opslaan", keyRemove: "Verwijderen",
       keySaved: "Sleutel opgeslagen op dit apparaat.", keyRemoved: "Sleutel verwijderd.", keyNone: "Nog geen sleutel ingesteld.",
-      keyBad: "Dit lijkt geen Anthropic API-sleutel (die begint met sk-ant-).",
-      keyPrivacy: "De sleutel blijft alleen op dit apparaat. Foto’s gaan rechtstreeks naar Anthropic om te analyseren en worden niet door deze app bewaard."
+      keyBad: "Dit lijkt geen Google API-sleutel (die begint met AIza).",
+      keyPrivacy: "De sleutel blijft alleen op dit apparaat. Foto’s gaan rechtstreeks naar Google en worden niet door deze app bewaard. Let op: bij gratis gebruik mag Google foto’s gebruiken om zijn diensten te verbeteren."
     },
     es: {
       title: "Glucosa", tabConv: "Convertir", tabCarb: "Carbohidratos",
@@ -96,7 +96,7 @@
       photoBusy: "Analizando la foto… suele tardar entre 10 y 30 segundos.",
       photoOffline: "Sin conexión. El reconocimiento de fotos solo funciona en línea; busca el plato arriba.",
       photoAuth: "La clave API no es válida. Revísala en Ajustes.",
-      photoRate: "Demasiadas solicitudes o saldo agotado. Inténtalo de nuevo en un minuto o revisa tu saldo.",
+      photoRate: "Se alcanzó el límite gratuito de Google. Inténtalo en un minuto, o mañana si se agotó el límite diario.",
       photoFail: "No se pudo estimar ({msg}). Inténtalo de nuevo o busca el plato.",
       photoRefused: "No se pudo evaluar esta foto. Prueba con otra.",
       photoNoFood: "No se reconoce comida en la foto.",
@@ -113,11 +113,11 @@
       tip3: "Un plato mide unos 26 cm. Un puño es más o menos 1 ración de arroz, pasta o patata.",
       tip4: "Las raciones de tapas suelen ser para compartir: usa el botón − para tu parte.",
       settingsH: "Ajustes de reconocimiento de fotos",
-      keyIntro: "El reconocimiento de fotos usa Claude de Anthropic. Necesitas tu propia clave API (console.anthropic.com → API Keys). Cada foto cuesta unos 2 a 5 céntimos.",
-      keySave: "Guardar", keyRemove: "Eliminar",
+      keyIntro: "El reconocimiento de fotos usa Gemini de Google y es gratis. Crea una clave gratuita una vez: ve a aistudio.google.com/apikey, entra con tu cuenta de Google, toca ‘Create API key’ y pega la clave abajo. Hay un máximo de fotos por minuto y por día.",
+      keyLink: "Crear clave gratis ↗", keySave: "Guardar", keyRemove: "Eliminar",
       keySaved: "Clave guardada en este dispositivo.", keyRemoved: "Clave eliminada.", keyNone: "Aún no hay clave.",
-      keyBad: "No parece una clave API de Anthropic (empieza por sk-ant-).",
-      keyPrivacy: "La clave se queda solo en este dispositivo. Las fotos se envían directamente a Anthropic para analizarlas y esta app no las guarda."
+      keyBad: "No parece una clave API de Google (empieza por AIza).",
+      keyPrivacy: "La clave se queda solo en este dispositivo. Las fotos se envían directamente a Google y esta app no las guarda. Ojo: con el uso gratuito, Google puede usar las fotos para mejorar sus servicios."
     },
     en: {
       title: "Glucose", tabConv: "Convert", tabCarb: "Carbs",
@@ -153,7 +153,7 @@
       photoBusy: "Looking at the photo… this usually takes 10 to 30 seconds.",
       photoOffline: "No internet connection. Photo recognition only works online; look the dish up above.",
       photoAuth: "The API key was not accepted. Check it in Settings.",
-      photoRate: "Too many requests or out of credit. Try again in a minute or check your credit.",
+      photoRate: "Google’s free limit has been reached. Try again in a minute, or tomorrow if the daily limit is used up.",
       photoFail: "Could not estimate ({msg}). Try again or look the dish up.",
       photoRefused: "This photo could not be assessed. Try another photo.",
       photoNoFood: "No food recognised in the photo.",
@@ -170,11 +170,11 @@
       tip3: "A dinner plate is about 26 cm. A fist is roughly 1 portion of rice, pasta or potato.",
       tip4: "Spanish ‘raciones’ are usually for sharing: use the − button for your share.",
       settingsH: "Photo recognition settings",
-      keyIntro: "Photo recognition uses Claude by Anthropic. You need your own API key (console.anthropic.com → API Keys). One photo costs roughly 2 to 5 cents.",
-      keySave: "Save", keyRemove: "Remove",
+      keyIntro: "Photo recognition uses Google Gemini and is free. Create a free key once: go to aistudio.google.com/apikey, sign in with your Google account, tap ‘Create API key’ and paste the key below. There is a maximum number of photos per minute and per day.",
+      keyLink: "Create free key ↗", keySave: "Save", keyRemove: "Remove",
       keySaved: "Key saved on this device.", keyRemoved: "Key removed.", keyNone: "No key set yet.",
-      keyBad: "This does not look like an Anthropic API key (it starts with sk-ant-).",
-      keyPrivacy: "The key stays on this device only. Photos go straight to Anthropic for analysis and are not stored by this app."
+      keyBad: "This does not look like a Google API key (it starts with AIza).",
+      keyPrivacy: "The key stays on this device only. Photos go straight to Google and are not stored by this app. Note: on the free tier Google may use photos to improve its services."
     }
   };
 
@@ -450,9 +450,9 @@
   });
 
   /* =========================================================
-     Photo estimate (Claude vision, user's own API key)
+     Photo estimate (Google Gemini, user's own free API key)
      ========================================================= */
-  var KEY_STORE = "glucose.apikey";
+  var KEY_STORE = "glucose.geminikey";
   var photoData = null; // base64 JPEG without prefix
   var photoResult = null;
 
@@ -501,14 +501,12 @@
 
   var SCHEMA = {
     type: "object",
-    additionalProperties: false,
     required: ["items", "total_carbs_g", "confidence", "notes"],
     properties: {
       items: {
         type: "array",
         items: {
           type: "object",
-          additionalProperties: false,
           required: ["name", "estimated_grams", "carbs_g"],
           properties: {
             name: { type: "string" },
@@ -523,6 +521,16 @@
     }
   };
   var LANG_NAME = { nl: "Dutch", es: "Spanish", en: "English" };
+  var SYSTEM =
+    "You help a person with diabetes count carbohydrates from a photo of their meal. " +
+    "Identify each separate food or drink you can see. For each one, estimate the edible weight in grams " +
+    "and its grams of carbohydrate, using typical recipes; the meals are often Dutch or Spanish. " +
+    "Use the plate (usually about 26 cm across), cutlery, glasses and hands as size references. " +
+    "Count carbohydrates in sauces, breading, bread on the side and sugary drinks. Do not count fibre as carbohydrate. " +
+    "If a dish is clearly a shared ración, estimate the whole dish shown. " +
+    "total_carbs_g is the sum of the items. confidence reflects how sure you are about the total. " +
+    "notes: one or two short sentences on what makes the estimate uncertain or what the person should check. " +
+    "If there is no food or drink in the photo, return an empty items list, total 0, confidence low, and say so in notes.";
 
   function estimate() {
     var key = load(KEY_STORE);
@@ -542,43 +550,35 @@
     var prompt = "Estimate the food on this photo for carbohydrate counting. Write every name and the notes in " +
       LANG_NAME[lang] + "." + (userHint ? " The person says the food is: \"" + userHint + "\"." : "");
 
-    import("./vendor/anthropic-sdk.js").then(function (mod) {
-      var Anthropic = mod.Anthropic;
-      var client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
-      return client.beta.messages.create({
-        model: "claude-opus-5-5",
-        max_tokens: 16000,
-        betas: ["server-side-fallback-2026-07-01"],
-        fallbacks: "default",
-        output_config: { effort: "medium", format: { type: "json_schema", schema: SCHEMA } },
-        system:
-          "You help a person with diabetes count carbohydrates from a photo of their meal. " +
-          "Identify each separate food or drink you can see. For each one, estimate the edible weight in grams " +
-          "and its grams of carbohydrate, using typical recipes; the meals are often Dutch or Spanish. " +
-          "Use the plate (usually about 26 cm across), cutlery, glasses and hands as size references. " +
-          "Count carbohydrates in sauces, breading, bread on the side and sugary drinks. Do not count fibre as carbohydrate. " +
-          "If a dish is clearly a shared ración, estimate the whole dish shown. " +
-          "total_carbs_g is the sum of the items. confidence reflects how sure you are about the total. " +
-          "notes: one or two short sentences on what makes the estimate uncertain or what the person should check. " +
-          "If there is no food or drink in the photo, return an empty items list, total 0, confidence low, and say so in notes.",
-        messages: [{
+    import("./vendor/google-genai.js").then(function (mod) {
+      var ai = new mod.GoogleGenAI({ apiKey: key });
+      return ai.models.generateContent({
+        model: "gemini-flash-latest",
+        contents: [{
           role: "user",
-          content: [
-            { type: "image", source: { type: "base64", media_type: "image/jpeg", data: photoData } },
-            { type: "text", text: prompt }
+          parts: [
+            { inlineData: { mimeType: "image/jpeg", data: photoData } },
+            { text: prompt }
           ]
-        }]
+        }],
+        config: {
+          responseMimeType: "application/json",
+          responseJsonSchema: SCHEMA,
+          systemInstruction: SYSTEM
+        }
       }).then(function (res) {
-        if (res.stop_reason === "refusal") throw { refused: true };
-        var text = "";
-        res.content.forEach(function (b) { if (b.type === "text") text += b.text; });
-        return JSON.parse(text);
+        var cand = res.candidates && res.candidates[0];
+        if ((res.promptFeedback && res.promptFeedback.blockReason) || (cand && cand.finishReason === "SAFETY")) throw { refused: true };
+        return JSON.parse(res.text || "");
       }).catch(function (err) {
-        if (err && err.refused) throw err;
-        if (err instanceof Anthropic.AuthenticationError || err instanceof Anthropic.PermissionDeniedError) throw { msgKey: "photoAuth" };
-        if (err instanceof Anthropic.RateLimitError) throw { msgKey: "photoRate" };
-        if (err instanceof Anthropic.APIConnectionError) throw { msgKey: "photoOffline" };
-        if (err instanceof Anthropic.APIError) throw { msg: (err.status || "") + " " + (err.error && err.error.error && err.error.error.message || err.message) };
+        if (err && (err.refused || err.msgKey)) throw err;
+        if (err instanceof mod.ApiError) {
+          var m = String(err.message || "");
+          if (err.status === 401 || err.status === 403 || (err.status === 400 && /api key/i.test(m))) throw { msgKey: "photoAuth" };
+          if (err.status === 429) throw { msgKey: "photoRate" };
+          throw { msg: err.status + " " + m.slice(0, 160) };
+        }
+        if (err instanceof TypeError) throw { msgKey: "photoOffline" };
         throw { msg: err && err.message ? err.message : String(err) };
       });
     }).then(showResult).catch(function (e) {
@@ -625,7 +625,7 @@
   }
   $("keySave").addEventListener("click", function () {
     var v = $("apiKey").value.trim();
-    if (!/^sk-ant-/.test(v)) { keyStatus("keyBad"); return; }
+    if (!/^AIza[\w-]{20,}$/.test(v)) { keyStatus("keyBad"); return; }
     store(KEY_STORE, v);
     $("apiKey").value = "";
     keyStatus("keySaved");

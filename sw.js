@@ -1,11 +1,11 @@
 // Offline cache: app shell is cached on install; fonts are cached the first time they load.
-const CACHE = "glucose-v2";
+const CACHE = "glucose-v3";
 const SHELL = [
   "./",
   "index.html",
   "app.js",
   "meals.js",
-  "vendor/anthropic-sdk.js",
+  "vendor/google-genai.js",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",

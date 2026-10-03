@@ -14,10 +14,11 @@ between **mg/dL** and **mmol/L** in both directions.
   - Search about 85 common Dutch and Spanish dishes, snacks, fruit and drinks (in NL, ES or EN names) with typical carbs per portion (`meals.js`).
   - *My plate* adds up the carbs of everything you pick; use − / + to change portions in half steps.
   - Label calculator: carbs per 100 g × grams eaten.
-  - Photo estimate: take a photo before eating and Claude (Anthropic) estimates the weight and carbs of each part.
-    Each user enters their own Anthropic API key under *Instellingen fotoherkenning*; it is stored only on that device
-    and the photo is sent directly from the phone to the Anthropic API (roughly 2–5 cents per photo).
-    The SDK is bundled in `vendor/anthropic-sdk.js` (`@anthropic-ai/sdk` 0.131.0, MIT).
+  - Photo estimate: take a photo before eating and Google Gemini estimates the weight and carbs of each part, for free.
+    Each user creates a free API key once at https://aistudio.google.com/apikey and enters it under *Instellingen fotoherkenning*;
+    the key is stored only on that device and the photo goes directly from the phone to Google. The free tier has per-minute and
+    per-day limits, and Google may use free-tier data to improve its services.
+    The SDK is bundled in `vendor/google-genai.js` (`@google/genai` 2.27.0, Apache-2.0).
 - Interface in Dutch, Spanish and English.
 
 Conversion: `mg/dL = mmol/L × 18.016`, `mmol/L = mg/dL ÷ 18.016`.
