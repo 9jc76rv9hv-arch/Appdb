@@ -24,7 +24,7 @@
         high: "10,1–13,9 mmol/L (181–250 mg/dL).",
         vhigh: "Boven 13,9 mmol/L (250 mg/dL). Volg je behandelplan en controleer zo nodig op ketonen."
       },
-      plateH: "Mijn bord", kh: "g KH", gCarb: "g koolhydraten", g: "g",
+      weight: "Gewicht", plateH: "Mijn bord", kh: "g KH", gCarb: "g koolhydraten", g: "g",
       plateEmpty: "Nog leeg. Zoek hieronder een gerecht en tik op +, of maak een foto.",
       searchH: "Gerecht zoeken", searchPh: "Bijv. stamppot, paella, churros",
       fAll: "Alles", fNl: "Nederland", fEs: "Spanje",
@@ -81,7 +81,7 @@
         high: "10,1–13,9 mmol/L (181–250 mg/dL).",
         vhigh: "Por encima de 13,9 mmol/L (250 mg/dL). Sigue tu plan y mide cetonas si te lo indicaron."
       },
-      plateH: "Mi plato", kh: "g HC", gCarb: "g de carbohidratos", g: "g",
+      weight: "Peso", plateH: "Mi plato", kh: "g HC", gCarb: "g de carbohidratos", g: "g",
       plateEmpty: "Vacío. Busca un plato abajo y toca +, o haz una foto.",
       searchH: "Buscar plato", searchPh: "Ej. paella, tortilla, stamppot",
       fAll: "Todo", fNl: "Países Bajos", fEs: "España",
@@ -138,7 +138,7 @@
         high: "10.1–13.9 mmol/L (181–250 mg/dL).",
         vhigh: "Above 13.9 mmol/L (250 mg/dL). Follow your care plan and check ketones if advised."
       },
-      plateH: "My plate", kh: "g carbs", gCarb: "g carbs", g: "g",
+      weight: "Weight", plateH: "My plate", kh: "g carbs", gCarb: "g carbs", g: "g",
       plateEmpty: "Empty. Search for a dish below and tap +, or take a photo.",
       searchH: "Find a dish", searchPh: "E.g. paella, stamppot, churros",
       fAll: "All", fNl: "Netherlands", fEs: "Spain",
@@ -386,6 +386,7 @@
       var m = MEALS[it.meal];
       return (m.p[lang] || m.p.nl) + " · " + it.kh + " " + t("kh");
     }
+    if (it.type === "photo" && it.g != null) return t("weight") + " ≈ " + it.g + " g";
     return it.sub || "";
   }
   function multText(x) {
@@ -601,7 +602,7 @@
     box.innerHTML =
       '<span class="conf">' + esc(t("conf")[r.confidence] || r.confidence) + "</span>" +
       '<ul class="list">' + r.items.map(function (it) {
-        return '<li style="grid-template-columns:1fr auto"><div class="name"><strong>' + esc(it.name) + "</strong><span>≈ " +
+        return '<li style="grid-template-columns:1fr auto"><div class="name"><strong>' + esc(it.name) + "</strong><span>" + esc(t("weight")) + " ≈ " +
           Math.round(it.estimated_grams) + " " + t("g") + '</span></div><div class="kh">' + Math.round(it.carbs_g) + " <small>" + t("kh") + "</small></div></li>";
       }).join("") + "</ul>" +
       '<div class="plate-total"><strong>' + esc(t("photoTotal")) + '</strong><span class="kh" style="font-size:1.4rem">' + Math.round(total) + " " + esc(t("kh")) + "</span></div>" +
@@ -611,7 +612,7 @@
     box.hidden = false;
     $("photoAdd").addEventListener("click", function () {
       photoResult.items.forEach(function (it) {
-        plate.push({ type: "photo", name: it.name, sub: "≈ " + Math.round(it.estimated_grams) + " g", kh: Math.round(+it.carbs_g || 0), mult: 1 });
+        plate.push({ type: "photo", name: it.name, g: Math.round(it.estimated_grams), kh: Math.round(+it.carbs_g || 0), mult: 1 });
       });
       savePlate(); renderPlate();
       box.hidden = true;
