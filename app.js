@@ -59,7 +59,7 @@
       keyIntro: "Fotoherkenning gebruikt Gemini van Google en is gratis. Maak één keer een gratis sleutel: ga naar aistudio.google.com/apikey, log in met je Google-account, tik op ‘Create API key’ en plak de sleutel hieronder. Er geldt een maximum aantal foto’s per minuut en per dag.",
       keyLink: "Gratis sleutel maken ↗", keySave: "Opslaan", keyRemove: "Verwijderen",
       keySaved: "Sleutel opgeslagen op dit apparaat.", keyRemoved: "Sleutel verwijderd.", keyNone: "Nog geen sleutel ingesteld.",
-      keyBad: "Dit lijkt geen Google API-sleutel (die begint met AIza).",
+      keyBad: "Dit lijkt geen volledige sleutel. Kopieer de hele sleutel uit Google AI Studio en plak hem opnieuw.",
       keyPrivacy: "De sleutel blijft alleen op dit apparaat. Foto’s gaan rechtstreeks naar Google en worden niet door deze app bewaard. Let op: bij gratis gebruik mag Google foto’s gebruiken om zijn diensten te verbeteren."
     },
     es: {
@@ -116,7 +116,7 @@
       keyIntro: "El reconocimiento de fotos usa Gemini de Google y es gratis. Crea una clave gratuita una vez: ve a aistudio.google.com/apikey, entra con tu cuenta de Google, toca ‘Create API key’ y pega la clave abajo. Hay un máximo de fotos por minuto y por día.",
       keyLink: "Crear clave gratis ↗", keySave: "Guardar", keyRemove: "Eliminar",
       keySaved: "Clave guardada en este dispositivo.", keyRemoved: "Clave eliminada.", keyNone: "Aún no hay clave.",
-      keyBad: "No parece una clave API de Google (empieza por AIza).",
+      keyBad: "No parece una clave completa. Copia toda la clave de Google AI Studio y pégala de nuevo.",
       keyPrivacy: "La clave se queda solo en este dispositivo. Las fotos se envían directamente a Google y esta app no las guarda. Ojo: con el uso gratuito, Google puede usar las fotos para mejorar sus servicios."
     },
     en: {
@@ -173,7 +173,7 @@
       keyIntro: "Photo recognition uses Google Gemini and is free. Create a free key once: go to aistudio.google.com/apikey, sign in with your Google account, tap ‘Create API key’ and paste the key below. There is a maximum number of photos per minute and per day.",
       keyLink: "Create free key ↗", keySave: "Save", keyRemove: "Remove",
       keySaved: "Key saved on this device.", keyRemoved: "Key removed.", keyNone: "No key set yet.",
-      keyBad: "This does not look like a Google API key (it starts with AIza).",
+      keyBad: "This does not look like a complete key. Copy the whole key from Google AI Studio and paste it again.",
       keyPrivacy: "The key stays on this device only. Photos go straight to Google and are not stored by this app. Note: on the free tier Google may use photos to improve its services."
     }
   };
@@ -624,8 +624,9 @@
     $("keyStatus").textContent = t(msgKey || (load(KEY_STORE) ? "keySaved" : "keyNone"));
   }
   $("keySave").addEventListener("click", function () {
-    var v = $("apiKey").value.trim();
-    if (!/^AIza[\w-]{20,}$/.test(v)) { keyStatus("keyBad"); return; }
+    // Google keys come in several formats (AIza…, AQ.…); only check it looks like one pasted key.
+    var v = $("apiKey").value.replace(/\s+/g, "");
+    if (!/^[\w.\-]{20,}$/.test(v)) { keyStatus("keyBad"); return; }
     store(KEY_STORE, v);
     $("apiKey").value = "";
     keyStatus("keySaved");
