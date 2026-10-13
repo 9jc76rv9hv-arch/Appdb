@@ -26,7 +26,22 @@
       },
       weight: "Gewicht", plateH: "Mijn bord", kh: "g KH", gCarb: "g koolhydraten", g: "g",
       plateEmpty: "Nog leeg. Zoek hieronder een gerecht en tik op +, of maak een foto.",
-      searchH: "Gerecht zoeken", searchPh: "Bijv. stamppot, paella, churros",
+      searchH: "Gerecht of voeding zoeken",
+      offH: "Supermarktproducten", offGo: "Zoek", scanBtn: "Scan barcode",
+      offIntro: "Zoek online in duizenden producten uit Nederlandse en Spaanse supermarkten (Albert Heijn, Jumbo, Lidl, Mercadona, Carrefour…), of scan de barcode op de verpakking.",
+      offPh: "Bijv. hagelslag, Mercadona tortilla",
+      offBusy: "Zoeken…", offNone: "Geen producten met koolhydraatwaarden gevonden. Probeer een ander woord of een merknaam.",
+      offOffline: "Geen internetverbinding. Online zoeken werkt alleen met internet.",
+      offFail: "Zoeken lukte niet ({msg}). Probeer het zo opnieuw.",
+      offWait: "Even wachten: de productdatabase staat maximaal 10 zoekopdrachten per minuut toe.",
+      offPer100: "{kh} g KH per 100 g", offServ: "portie {s}: {kh} g KH",
+      offGrams: "Gram", offAddBtn: "Toevoegen", offFound: "{n} producten gevonden",
+      offToOnline: "Zoek ‘{q}’ in supermarktproducten ↓",
+      scanReading: "Barcode lezen…", scanNone: "Geen barcode gevonden op de foto. Typ het nummer onder de streepjes hieronder in.",
+      scanManual: "Je telefoon kan geen barcodes lezen. Typ het nummer onder de streepjes in.",
+      codeNotFound: "Product {code} staat niet in de database of heeft geen koolhydraatwaarde.",
+      offSource: "Productgegevens: Open Food Facts, een open database die door vrijwilligers wordt bijgehouden. Controleer bij twijfel het etiket.",
+      searchPh: "Bijv. stamppot, paella, yoghurt, appel",
       fAll: "Alles", fNl: "Nederland", fEs: "Spanje",
       noResults: "Niets gevonden. Probeer een ander woord, of gebruik de etiket-rekenaar hieronder.",
       showMore: "Toon meer ({n})", addTo: "Voeg {name} toe aan mijn bord", remove: "Verwijder {name}",
@@ -83,7 +98,22 @@
       },
       weight: "Peso", plateH: "Mi plato", kh: "g HC", gCarb: "g de carbohidratos", g: "g",
       plateEmpty: "Vacío. Busca un plato abajo y toca +, o haz una foto.",
-      searchH: "Buscar plato", searchPh: "Ej. paella, tortilla, stamppot",
+      searchH: "Buscar plato o alimento",
+      offH: "Productos de supermercado", offGo: "Buscar", scanBtn: "Escanear código",
+      offIntro: "Busca en miles de productos de supermercados de España y Países Bajos (Mercadona, Carrefour, Lidl, Albert Heijn, Jumbo…) o escanea el código de barras del envase.",
+      offPh: "Ej. tortilla Mercadona, galletas",
+      offBusy: "Buscando…", offNone: "No hay productos con carbohidratos. Prueba otra palabra o una marca.",
+      offOffline: "Sin conexión. La búsqueda en línea necesita internet.",
+      offFail: "La búsqueda falló ({msg}). Inténtalo de nuevo.",
+      offWait: "Espera un momento: la base de datos permite como máximo 10 búsquedas por minuto.",
+      offPer100: "{kh} g HC por 100 g", offServ: "ración {s}: {kh} g HC",
+      offGrams: "Gramos", offAddBtn: "Añadir", offFound: "{n} productos encontrados",
+      offToOnline: "Buscar ‘{q}’ en productos de supermercado ↓",
+      scanReading: "Leyendo código…", scanNone: "No se encontró un código en la foto. Escribe el número de debajo de las barras.",
+      scanManual: "Tu móvil no puede leer códigos. Escribe el número de debajo de las barras.",
+      codeNotFound: "El producto {code} no está en la base de datos o no tiene carbohidratos.",
+      offSource: "Datos de productos: Open Food Facts, una base de datos abierta mantenida por voluntarios. Si dudas, mira la etiqueta.",
+      searchPh: "Ej. paella, tortilla, stamppot",
       fAll: "Todo", fNl: "Países Bajos", fEs: "España",
       noResults: "No se encontró nada. Prueba otra palabra o usa la calculadora de etiqueta.",
       showMore: "Ver más ({n})", addTo: "Añadir {name} a mi plato", remove: "Quitar {name}",
@@ -140,7 +170,22 @@
       },
       weight: "Weight", plateH: "My plate", kh: "g carbs", gCarb: "g carbs", g: "g",
       plateEmpty: "Empty. Search for a dish below and tap +, or take a photo.",
-      searchH: "Find a dish", searchPh: "E.g. paella, stamppot, churros",
+      searchH: "Find a dish or food",
+      offH: "Supermarket products", offGo: "Search", scanBtn: "Scan barcode",
+      offIntro: "Search thousands of products from Dutch and Spanish supermarkets (Albert Heijn, Jumbo, Lidl, Mercadona, Carrefour…), or scan the barcode on the pack.",
+      offPh: "E.g. hagelslag, Mercadona tortilla",
+      offBusy: "Searching…", offNone: "No products with carb values found. Try another word or a brand name.",
+      offOffline: "No internet connection. Online search needs internet.",
+      offFail: "Search failed ({msg}). Try again shortly.",
+      offWait: "Please wait: the product database allows at most 10 searches per minute.",
+      offPer100: "{kh} g carbs per 100 g", offServ: "serving {s}: {kh} g carbs",
+      offGrams: "Grams", offAddBtn: "Add", offFound: "{n} products found",
+      offToOnline: "Search ‘{q}’ in supermarket products ↓",
+      scanReading: "Reading barcode…", scanNone: "No barcode found in the photo. Type the number under the bars below.",
+      scanManual: "Your phone can’t read barcodes. Type the number under the bars.",
+      codeNotFound: "Product {code} is not in the database or has no carb value.",
+      offSource: "Product data: Open Food Facts, an open database maintained by volunteers. Check the label when in doubt.",
+      searchPh: "E.g. paella, stamppot, churros",
       fAll: "All", fNl: "Netherlands", fEs: "Spain",
       noResults: "Nothing found. Try another word, or use the label calculator below.",
       showMore: "Show more ({n})", addTo: "Add {name} to my plate", remove: "Remove {name}",
@@ -347,7 +392,15 @@
     var rest = hits.length - shown.length;
     $("mealMore").hidden = rest <= 0;
     $("mealMore").textContent = tf("showMore", { n: rest });
+    var raw = $("mealSearch").value.trim();
+    $("mealToOnline").hidden = raw.length < 2;
+    $("mealToOnline").textContent = tf("offToOnline", { q: raw });
   }
+  $("mealToOnline").addEventListener("click", function () {
+    $("offQuery").value = $("mealSearch").value.trim();
+    $("off-h").scrollIntoView({ behavior: "smooth", block: "start" });
+    offSearch();
+  });
 
   $("mealSearch").addEventListener("input", function () { showAll = false; renderMeals(); });
   $("mealMore").addEventListener("click", function () { showAll = true; renderMeals(); });
@@ -387,6 +440,7 @@
       return (m.p[lang] || m.p.nl) + " · " + it.kh + " " + t("kh");
     }
     if (it.type === "photo" && it.g != null) return t("weight") + " ≈ " + it.g + " g";
+    if (it.type === "product") return [it.brand, fmt(it.g, 0) + " g"].filter(Boolean).join(" · ");
     return it.sub || "";
   }
   function multText(x) {
@@ -427,6 +481,160 @@
     renderPlate();
   });
   $("plateClear").addEventListener("click", function () { plate = []; savePlate(); renderPlate(); });
+
+  /* =========================================================
+     Supermarket products (Open Food Facts, free and open data)
+     ========================================================= */
+  var OFF = "https://world.openfoodfacts.org";
+  var OFF_FIELDS = "code,product_name,product_name_nl,product_name_es,product_name_en,brands,quantity,serving_size,serving_quantity,nutriments";
+  var OFF_COUNTRY = { nl: "netherlands", es: "spain" };
+  var offItems = [], offTimes = [];
+
+  function offStatus(text, isError) {
+    $("offStatus").innerHTML = text;
+    $("offStatus").className = isError ? "error" : "note";
+  }
+  function num(v) { v = parseFloat(v); return isFinite(v) ? v : null; }
+  function offProduct(p) {
+    var n = p.nutriments || {};
+    var per100 = num(n.carbohydrates_100g);
+    if (per100 === null || per100 > 100) return null;
+    var name = p["product_name_" + lang] || p.product_name || p.product_name_nl || p.product_name_es || p.product_name_en;
+    if (!name) return null;
+    return {
+      code: p.code, name: String(name).trim(), brand: String(p.brands || "").split(",")[0].trim(),
+      qty: p.quantity || "", per100: per100,
+      serving: p.serving_size || "", servingG: num(p.serving_quantity)
+    };
+  }
+  // The database allows 10 search requests per minute per user.
+  function offAllowed() {
+    var now = Date.now();
+    offTimes = offTimes.filter(function (x) { return now - x < 60000; });
+    if (offTimes.length >= 10) return false;
+    offTimes.push(now);
+    return true;
+  }
+  function offFetch(url) {
+    return fetch(url, { headers: { Accept: "application/json" } }).then(function (r) {
+      if (r.status === 429 || r.status === 503) throw { msgKey: "offWait" };
+      if (!r.ok) throw { msg: "HTTP " + r.status };
+      return r.json();
+    });
+  }
+  function offSearch() {
+    var q = $("offQuery").value.trim();
+    if (q.length < 2) return;
+    if (navigator.onLine === false) { offStatus(esc(t("offOffline")), true); return; }
+    var countries = country === "all" ? ["nl", "es"] : [country];
+    if (!offAllowed() || (countries.length > 1 && !offAllowed())) { offStatus(esc(t("offWait")), true); return; }
+    offStatus('<span class="spinner" aria-hidden="true"></span>' + esc(t("offBusy")), false);
+    $("offGo").disabled = true;
+    Promise.all(countries.map(function (c) {
+      return offFetch(OFF + "/cgi/search.pl?action=process&json=1&search_simple=1&page_size=24&sort_by=unique_scans_n" +
+        "&search_terms=" + encodeURIComponent(q) + "&fields=" + OFF_FIELDS +
+        "&tagtype_0=countries&tag_contains_0=contains&tag_0=" + OFF_COUNTRY[c]);
+    })).then(function (results) {
+      // Interleave the countries and drop duplicates and products without carb values.
+      var seen = {}, out = [], lists = results.map(function (r) { return (r.products || []).map(offProduct).filter(Boolean); });
+      for (var i = 0; i < 24; i++) {
+        lists.forEach(function (l) { var p = l[i]; if (p && !seen[p.code]) { seen[p.code] = 1; out.push(p); } });
+      }
+      offItems = out;
+      renderOff();
+      offStatus(out.length ? esc(tf("offFound", { n: out.length })) : esc(t("offNone")), !out.length);
+    }).catch(offError).then(function () { $("offGo").disabled = false; });
+  }
+  function offError(e) {
+    if (e && e.msgKey) offStatus(esc(t(e.msgKey)), true);
+    else if (e instanceof TypeError) offStatus(esc(t("offOffline")), true);
+    else offStatus(esc(tf("offFail", { msg: e && e.msg ? e.msg : String(e && e.message || e) })), true);
+  }
+  function offLookup(code) {
+    code = String(code).replace(/\D/g, "");
+    if (code.length < 6) return;
+    if (navigator.onLine === false) { offStatus(esc(t("offOffline")), true); return; }
+    offStatus('<span class="spinner" aria-hidden="true"></span>' + esc(t("offBusy")), false);
+    offFetch(OFF + "/api/v2/product/" + code + "?fields=" + OFF_FIELDS).then(function (r) {
+      var p = r && r.product ? offProduct(Object.assign({ code: code }, r.product)) : null;
+      offItems = p ? [p] : [];
+      renderOff(p ? 0 : -1);
+      offStatus(p ? "" : esc(tf("codeNotFound", { code: code })), !p);
+    }).catch(function (e) {
+      if (e && e.msg === "HTTP 404") offStatus(esc(tf("codeNotFound", { code: code })), true); else offError(e);
+    });
+  }
+  function fmtKh(x) { return fmt(x, x < 10 ? 1 : 0); }
+  function renderOff(openIdx) {
+    $("offList").innerHTML = offItems.map(function (p, i) {
+      var sub = [p.brand, p.qty].filter(Boolean).join(" · ");
+      var line = tf("offPer100", { kh: fmtKh(p.per100) });
+      if (p.servingG) line += " · " + tf("offServ", { s: p.serving || p.servingG + " g", kh: fmtKh(p.per100 * p.servingG / 100) });
+      var g = p.servingG || 100;
+      return '<li><div class="name"><strong>' + esc(p.name) + "</strong><span>" + esc(sub) + "</span><span>" + esc(line) + "</span></div>" +
+        '<div class="kh">' + fmtKh(p.per100) + " <small>/100 g</small></div>" +
+        '<button type="button" class="add" data-off="' + i + '" aria-label="' + esc(tf("addTo", { name: p.name })) + '">+</button>' +
+        '<div class="off-add" data-row="' + i + '"' + (openIdx === i ? "" : " hidden") + '>' +
+        '<label for="offG' + i + '" class="note" style="margin:0">' + esc(t("offGrams")) + "</label>" +
+        '<input class="textin" id="offG' + i + '" type="text" inputmode="decimal" value="' + g + '">' +
+        '<output class="kh" id="offK' + i + '">' + fmtKh(p.per100 * g / 100) + " " + esc(t("kh")) + "</output>" +
+        '<button type="button" class="btn" data-offadd="' + i + '">' + esc(t("offAddBtn")) + "</button></div></li>";
+    }).join("");
+  }
+  $("offForm").addEventListener("submit", function (e) { e.preventDefault(); $("offQuery").blur(); offSearch(); });
+  $("codeForm").addEventListener("submit", function (e) { e.preventDefault(); offLookup($("codeInput").value); });
+  $("offList").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-off]");
+    if (b) {
+      var row = $("offList").querySelector('[data-row="' + b.getAttribute("data-off") + '"]');
+      row.hidden = !row.hidden;
+      if (!row.hidden) row.querySelector("input").focus();
+      return;
+    }
+    var a = e.target.closest("button[data-offadd]");
+    if (!a) return;
+    var i = +a.getAttribute("data-offadd"), p = offItems[i], g = parse($("offG" + i).value);
+    if (g === null || isNaN(g) || g <= 0) return;
+    addToPlate({ type: "product", name: p.name, brand: p.brand, g: g, per100: p.per100, kh: Math.round(p.per100 * g) / 100, mult: 1 });
+    a.textContent = "✓";
+    setTimeout(function () { renderOff(); }, 700);
+  });
+  $("offList").addEventListener("input", function (e) {
+    var m = /^offG(\d+)$/.exec(e.target.id);
+    if (!m) return;
+    var p = offItems[+m[1]], g = parse(e.target.value);
+    $("offK" + m[1]).textContent = (g === null || isNaN(g) ? "–" : fmtKh(p.per100 * g / 100)) + " " + t("kh");
+  });
+
+  // Barcode: read it from a photo where the phone supports it, otherwise type the number.
+  var detector = null;
+  try {
+    if ("BarcodeDetector" in window) detector = new window.BarcodeDetector({ formats: ["ean_13", "ean_8", "upc_a", "upc_e"] });
+  } catch (e) { detector = null; }
+  $("scanBtn").addEventListener("click", function () {
+    if (!detector) {
+      $("codeForm").hidden = false;
+      offStatus(esc(t("scanManual")), false);
+      $("codeInput").focus();
+      return;
+    }
+    $("scanInput").click();
+  });
+  $("scanInput").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    this.value = "";
+    if (!file) return;
+    offStatus('<span class="spinner" aria-hidden="true"></span>' + esc(t("scanReading")), false);
+    createImageBitmap(file).then(function (bmp) { return detector.detect(bmp); }).then(function (codes) {
+      if (codes && codes.length) {
+        $("codeInput").value = codes[0].rawValue;
+        offLookup(codes[0].rawValue);
+      } else {
+        $("codeForm").hidden = false;
+        offStatus(esc(t("scanNone")), true);
+      }
+    }).catch(function () { $("codeForm").hidden = false; offStatus(esc(t("scanNone")), true); });
+  });
 
   /* =========================================================
      Label calculator
@@ -650,6 +858,8 @@
     });
     $("appTitle").textContent = t("title");
     $("mealSearch").placeholder = t("searchPh");
+    $("offQuery").placeholder = t("offPh");
+    renderOff();
     $("photoHint").placeholder = t("photoHintPh");
     mmolEl.placeholder = "0" + sep() + "0";
     if (cur !== null && !isNaN(cur)) {

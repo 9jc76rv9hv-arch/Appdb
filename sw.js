@@ -1,6 +1,6 @@
 // Offline support. Own files: network first (so updates show right away), cache as offline fallback.
 // Fonts: cache first. API calls are never touched.
-const CACHE = "glucose-v4";
+const CACHE = "glucose-v5";
 const SHELL = [
   "./",
   "index.html",

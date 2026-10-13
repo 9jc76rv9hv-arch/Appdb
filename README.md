@@ -11,7 +11,8 @@ between **mg/dL** and **mmol/L** in both directions.
 - Tap-to-load reference table, Dutch and English, light and dark mode.
 - Installable on the home screen and works offline (Progressive Web App).
 - **Carbs tab** (Koolhydraten):
-  - Search about 85 common Dutch and Spanish dishes, snacks, fruit and drinks (in NL, ES or EN names) with typical carbs per portion (`meals.js`).
+  - Search about 280 common Dutch and Spanish dishes and supermarket foods (bread, cereals, dairy, potatoes/rice/pasta, vegetables, fruit, snacks, sweets, sauces, drinks) in NL, ES or EN, with typical carbs per portion (`meals.js`). Works offline.
+  - Supermarket products: online search and barcode lookup in [Open Food Facts](https://world.openfoodfacts.org) (free, open data, ODbL), limited to products sold in the Netherlands and Spain. Shows carbs per 100 g and per serving; enter the grams you eat to add it to the plate. Barcodes are read from a photo where the phone supports it (Android Chrome); otherwise the number can be typed. Respects the database's limit of 10 searches per minute.
   - *My plate* adds up the carbs of everything you pick; use − / + to change portions in half steps.
   - Label calculator: carbs per 100 g × grams eaten.
   - Photo estimate: take a photo before eating and Google Gemini estimates the weight and carbs of each part, for free.

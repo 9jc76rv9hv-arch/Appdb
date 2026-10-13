@@ -251,6 +251,8 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 details.card summary { cursor: pointer; font-weight: 700; color: var(--muted); font-size: 0.9rem; list-style-position: inside; }
 details.card[open] summary { margin-bottom: 8px; }
 .tips { margin: 0; padding-left: 1.2em; font-size: 0.95rem; display: flex; flex-direction: column; gap: 6px; }
+.off-add { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.off-add input { width: 6.5em; font-family: var(--font-num); font-weight: 700; margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
 </style>
 </head>
@@ -340,7 +342,7 @@ details.card[open] summary { margin-bottom: 8px; }
     </section>
 
     <section class="card" aria-labelledby="search-h">
-      <h2 id="search-h" data-i18n="searchH">Gerecht zoeken</h2>
+      <h2 id="search-h" data-i18n="searchH">Gerecht of voeding zoeken</h2>
       <div class="searchbox">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
         <input id="mealSearch" type="search" autocomplete="off" enterkeyhint="search" placeholder="Bijv. stamppot, paella, churros">
@@ -353,6 +355,28 @@ details.card[open] summary { margin-bottom: 8px; }
       <ul class="list" id="mealList"></ul>
       <p class="empty" id="mealEmpty" hidden data-i18n="noResults">Niets gevonden. Probeer een ander woord, of gebruik de etiket-rekenaar hieronder.</p>
       <button type="button" class="more" id="mealMore" hidden></button>
+      <button type="button" class="more" id="mealToOnline" hidden></button>
+    </section>
+
+    <section class="card" aria-labelledby="off-h">
+      <h2 id="off-h" data-i18n="offH">Supermarktproducten</h2>
+      <p class="note" style="margin-top:0" data-i18n="offIntro"></p>
+      <form id="offForm" class="searchbox" style="margin-top:10px" role="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="offQuery" type="search" autocomplete="off" enterkeyhint="search" placeholder="Bijv. hagelslag, Mercadona tortilla">
+        <button type="submit" class="clear" id="offGo" data-i18n="offGo">Zoek</button>
+      </form>
+      <div class="row-actions" style="margin-top:10px">
+        <button type="button" class="btn secondary" id="scanBtn" data-i18n="scanBtn">Scan barcode</button>
+      </div>
+      <input class="hidden-input" type="file" id="scanInput" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+      <form id="codeForm" class="searchbox" style="margin-top:10px" hidden>
+        <input id="codeInput" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="search" placeholder="8710400000000">
+        <button type="submit" class="clear" data-i18n="offGo">Zoek</button>
+      </form>
+      <p class="note" id="offStatus" aria-live="polite"></p>
+      <ul class="list" id="offList"></ul>
+      <p class="note" data-i18n="offSource"></p>
     </section>
 
     <section class="card" aria-labelledby="photo-h">
