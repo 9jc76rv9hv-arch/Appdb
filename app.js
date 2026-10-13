@@ -369,10 +369,17 @@
   function renderMeals() {
     var q = norm($("mealSearch").value).trim();
     var words = q ? q.split(/\s+/) : [];
-    var hits = MEALS.filter(function (m) {
-      if (country !== "all" && m.c !== country && m.c !== "x") return false;
-      return words.every(function (w) { return m.idx.indexOf(w) !== -1; });
-    });
+    function find(ws) {
+      return MEALS.filter(function (m) {
+        if (country !== "all" && m.c !== country && m.c !== "x") return false;
+        return ws.every(function (w) { return m.idx.indexOf(w) !== -1; });
+      });
+    }
+    var hits = find(words);
+    // Nothing found: allow small spelling differences ("tomato frito", "yogurt") by matching word stems.
+    if (!hits.length && words.length) {
+      hits = find(words.map(function (w) { return w.length > 4 ? w.slice(0, w.length - 2) : w; }));
+    }
     if (words.length) {
       // Matches at the start of the name in the current language come first.
       hits.sort(function (a, b) {
